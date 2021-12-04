@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use utils::Input;
 
 mod bits;
@@ -16,8 +18,12 @@ fn main() {
         calculate_power_consumption
     );
 
+    let start = Instant::now();
+    let life_support_rating = life_support_rating(Input::new(FILE_NAME)); // 4667284 637470 2974222
+    let duration = start.elapsed();
+
     println!(
-        "life_support_rating: {}",
-        life_support_rating(Input::new(FILE_NAME)) // 4667284 637470 2974222
+        "Time elapsed in life_support_rating() is: {:?} and result is {}",
+        duration, life_support_rating
     );
 }

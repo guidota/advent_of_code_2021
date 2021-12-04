@@ -28,11 +28,6 @@ pub fn set_bit(original: &mut usize, bit: u8) {
     *original = *original | mask;
 }
 
-pub fn clear_bit(original: &mut usize, bit: u8) {
-    let mask = 1 << bit;
-    *original = *original & !mask;
-}
-
 pub fn toggle_bit(original: &mut usize, bit: u8) {
     let mask = 1 << bit;
     *original = *original ^ mask;

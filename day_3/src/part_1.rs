@@ -15,10 +15,13 @@ pub fn calculate_power_consumption(input: Input) -> usize {
 }
 
 pub fn gamma_rate(bits: Vec<isize>) -> usize {
-    bits.iter().enumerate().fold(0, |mut acc, (index, bit)| {
-        if *bit >= 0 {
-            set_bit(&mut acc, index.try_into().unwrap());
-        }
-        acc
-    })
+    bits.iter()
+        .rev()
+        .enumerate()
+        .fold(0, |mut acc, (index, bit)| {
+            if *bit >= 0 {
+                set_bit(&mut acc, index.try_into().unwrap());
+            }
+            acc
+        })
 }
