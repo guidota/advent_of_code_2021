@@ -20,6 +20,40 @@ impl Line {
         let max = self.origin.1.max(self.destination.1);
         min..max + 1
     }
+
+    // diagonal iteration
+    fn iter(&self) -> impl Iterator<Item = (usize, usize)> {
+        let mut x = self.origin.0;
+        let mut y = self.origin.1;
+        let dest_x = self.destination.0;
+        let dest_y = self.destination.1;
+        let mut last = true;
+        std::iter::from_fn(move || {
+            let result = (x, y);
+            // move x to dest
+            if x < dest_x {
+                x += 1;
+            } else {
+                x -= 1;
+            }
+
+            if y < dest_y {
+                y += 1;
+            } else {
+                y -= 1;
+            }
+
+            if x == dest_x && y == dest_y {
+                if last {
+                    last = false;
+                    return Some(result);
+                } else {
+                    return None;
+                }
+            }
+            Some(result)
+        })
+    }
 }
 
 fn main() {
@@ -29,13 +63,16 @@ fn main() {
 
     let mut map = HashMap::new();
     for line in lines {
-        // only consider horizontal or vertical lines
-        if (line.origin.0 != line.destination.0) && (line.origin.1 != line.destination.1) {
-            continue;
-        }
-
-        for x in line.horizontal_iter() {
-            for y in line.vertical_iter() {
+        if line.origin.0 == line.destination.0 || line.origin.1 == line.destination.1 {
+            // iterate horizontally or vertically
+            for x in line.horizontal_iter() {
+                for y in line.vertical_iter() {
+                    *map.entry((x, y)).or_insert(0) += 1;
+                }
+            }
+        } else {
+            // iterate diagnoally
+            for (x, y) in line.iter() {
                 *map.entry((x, y)).or_insert(0) += 1;
             }
         }
