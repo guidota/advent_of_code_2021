@@ -3,6 +3,11 @@ use std::{
     fmt::{Display, Formatter},
 };
 
+mod part_1;
+mod part_2;
+
+use part_1::find_winner_board;
+use part_2::find_last_winner_board;
 use utils::*;
 static FILE_NAME: &str = "day_4/resources/input.txt";
 
@@ -62,14 +67,14 @@ impl Cell {
 }
 
 #[derive(Debug)]
-struct Board<BoardState> {
+pub struct Board<BoardState> {
     grid: Vec<Vec<Cell>>,
     state: BoardState,
 }
 
 struct InitialState {}
 
-struct FinalState {
+pub struct FinalState {
     round: usize,
     final_number: usize,
 }
@@ -166,40 +171,17 @@ impl Board<InitialState> {
 }
 
 fn main() {
-    let mut input = Input::new(FILE_NAME);
-    let mut bingo_input = BingoInput::parse(&mut input);
+    let winner_board = find_winner_board();
+    println!(
+        "winner board {} with points {}",
+        winner_board,
+        winner_board.get_points()
+    );
 
-    // calculate board scores
-    let winning_board = bingo_input
-        .boards
-        .iter_mut()
-        .map(|board| {
-            let board = board.play(&bingo_input.numbers);
-            board
-        })
-        .max_by(|board_1, board_2| {
-            if board_1.is_bingo() && !board_2.is_bingo() {
-                return Ordering::Greater;
-            }
-            if board_2.is_bingo() && !board_1.is_bingo() {
-                return Ordering::Less;
-            }
-            if board_1.get_bingo_round() < board_2.get_bingo_round() {
-                return Ordering::Greater;
-            }
-            if board_2.get_bingo_round() < board_1.get_bingo_round() {
-                return Ordering::Less;
-            }
-            if board_1.get_points() < board_2.get_points() {
-                return Ordering::Greater;
-            }
-            if board_2.get_points() < board_1.get_points() {
-                return Ordering::Less;
-            }
-            Ordering::Equal
-        });
-
-    // get max score
-    println!("{}", winning_board.as_ref().unwrap());
-    dbg!(winning_board.expect("No board").get_points());
+    let last_winner_board = find_last_winner_board();
+    println!(
+        "last winner board {} with points {}",
+        last_winner_board,
+        last_winner_board.get_points()
+    );
 }
