@@ -13,6 +13,18 @@ impl Input {
         let lines = buffer.lines();
         Input { lines }
     }
+
+    pub fn parse_numbers(file_name: &str) -> Vec<i32> {
+        let buffer = BufReader::new(File::open(file_name).expect("File not found"));
+        buffer
+            .lines()
+            .next()
+            .unwrap()
+            .unwrap()
+            .split(",")
+            .map(|number| number.parse::<i32>().unwrap())
+            .collect()
+    }
 }
 
 impl Iterator for Input {
