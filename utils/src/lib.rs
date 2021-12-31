@@ -37,6 +37,19 @@ impl Input {
             })
             .collect()
     }
+
+    pub fn parse_matrix_10(file_name: &str) -> [[u32; 10]; 10] {
+        let input = Input::new(file_name);
+
+        let mut matrix = [[0; 10]; 10];
+
+        for (y, line) in input.enumerate() {
+            for (x, c) in line.chars().enumerate() {
+                matrix[y][x] = c.to_digit(10).unwrap();
+            }
+        }
+        matrix
+    }
 }
 
 impl Iterator for Input {
