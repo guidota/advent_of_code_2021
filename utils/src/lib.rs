@@ -25,6 +25,18 @@ impl Input {
             .map(|number| number.parse::<i32>().unwrap())
             .collect()
     }
+    pub fn parse_matrix(file_name: &str) -> Vec<Vec<u32>> {
+        let buffer = BufReader::new(File::open(file_name).expect("File not found"));
+        buffer
+            .lines()
+            .map(|line| {
+                line.unwrap()
+                    .chars()
+                    .map(|c| c.to_digit(10).unwrap())
+                    .collect::<Vec<u32>>()
+            })
+            .collect()
+    }
 }
 
 impl Iterator for Input {
